@@ -9,19 +9,12 @@ class Solution{
 public: 
       int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) {
         int units = 0; 
-        auto cmp = [](const vector<int>& a, const vector<int>& b){return a[1]<b[1]; };
-        
-        priority_queue<vector<int>, vector<vector<int>>, decltype(cmp)> maxHeap(cmp); 
-        for(auto d: boxTypes){
-          maxHeap.push(d); 
-        }
-        while(!maxHeap.empty() && truckSize>0){
-          auto t = maxHeap.top(); 
-          int box_num = t[0]; 
-          int box_uni = t[1]; 
-          maxHeap.pop(); 
-          units += box_uni*min(box_uni, truckSize); 
-          truckSize -= box_uni; 
+        sort(boxTypes.begin(), boxTypes.end(), [](vector<int>& a, vector<int>& b){return a[1]>b[1]; });
+        for(auto box:boxTypes){
+              int number = min(truckSize, box[0]); 
+              units +=number*box[1]; 
+              truckSize -=number; 
+              if(truckSize<=0) break; 
         }
         return units; 
         
